@@ -1,0 +1,9 @@
+{
+  "name": "chat_emoji_core",
+  "version": "0.0.1",
+  "title": "Chat Emoji Core",
+  "author": "ArsStels & Artem00 & Ars_Mond",
+  "factorio_version": "1.1",
+  "dependencies": ["base >= 1.0", "informatron >= 0.3.4"],
+  "description": "This mod adds a lot of different emojis to your game's chat. To use them, you should open mod's tab in Informatron, where you will find full list of available emojis."
+}

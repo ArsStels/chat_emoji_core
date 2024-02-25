@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 25.02.2024
+  Changes:
+	- Remove from Chat-Emoji and initialize this mod with core.
