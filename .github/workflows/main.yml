@@ -33,7 +33,7 @@ jobs:
       - name: Get Tag
         shell: bash
         run: |
-          echo "TAG=${$(git describe --tags --abbrev=0)#v.}" >> $GITHUB_ENV
+          echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
       - name: Packages
         shell: bash
         run: |
