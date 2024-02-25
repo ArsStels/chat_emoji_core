@@ -1,6 +1,7 @@
 name: Packages and Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -19,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Emojis-${{ github.ref }}
+          release_name: ChatEmojiCore-${{ github.ref }}
           prerelease: false
 
   build:
@@ -32,13 +33,11 @@ jobs:
       - name: Get Tag
         shell: bash
         run: |
-          echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "TAG="${$(git describe --tags --abbrev=0)#v.}"" >> $GITHUB_ENV
       - name: Packages
         shell: bash
         run: |
-          _tag="{{ env.TAG }}"
-          r_tag=${tag#v.}
-          release_name="chat_emoji_core_${r_tag}"
+          release_name="chat_emoji_core_${{ env.TAG }}"
           
           mkdir "${release_name}"
 
@@ -53,6 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: chat_emoji_core_${{ env.TAG }#v.}.zip
-          asset_name: chat_emoji_core_${{ env.TAG }#v.}.zip
+          asset_path: chat_emoji_core_${{ env.TAG }}.zip
+          asset_name: chat_emoji_core_${{ env.TAG }}.zip
           asset_content_type: application/zip
