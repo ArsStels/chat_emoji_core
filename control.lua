@@ -25,7 +25,7 @@ for ModNameForModsTable, _ in pairs(script.active_mods) do
     ModsTable[ModNameForModsTable] = 1
   end
 end
-
+  
 -- @ log(serpent.block(ModsTable))
 
 -- # Передали таблицу с отдельными модами в интерфейс
