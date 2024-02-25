@@ -34,7 +34,8 @@ jobs:
         shell: bash
         run: |
           echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-          echo "TAG2=${TAG#v.}" >> $GITHUB_ENV
+          _tag=$(git describe --tags --abbrev=0)
+          echo "TAG2=${_tag#v.}" >> $GITHUB_ENV
       - name: Packages
         shell: bash
         run: |
@@ -42,7 +43,7 @@ jobs:
           
           mkdir "${release_name}"
 
-          cp -r * "${release_name}/"
+          cp * "${release_name}/"
           # Pack files
           7z a -tzip "${release_name}.zip" "./*"
 
