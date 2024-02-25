@@ -1,0 +1,58 @@
+name: Packages and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.release.outputs.upload_url }}
+    steps:
+      - name: Create release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Emojis-${{ github.ref }}
+          prerelease: false
+
+  build:
+    name: Release
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Get Tag
+        shell: bash
+        run: |
+          echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: Packages
+        shell: bash
+        run: |
+          _tag="{{ env.TAG }}"
+          r_tag=${tag#v.}
+          release_name="chat_emoji_core_${r_tag}"
+          
+          mkdir "${release_name}"
+
+          cp -r * "${release_name}/"
+          # Pack files
+          7z a -tzip "${release_name}.zip" "./*"
+
+          rm -r "${release_name}/"
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: chat_emoji_core_${{ env.TAG }#v.}.zip
+          asset_name: chat_emoji_core_${{ env.TAG }#v.}.zip
+          asset_content_type: application/zip
