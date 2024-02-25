@@ -43,8 +43,8 @@ jobs:
           
           mkdir "${release_name}"
 
-          cp * "${release_name}/"
-          # Pack files
+          for file in $(<list.txt); do cp -r "$file" "${release_name}/"; done
+          
           7z a -tzip "${release_name}.zip" "./*"
 
           rm -r "${release_name}/"

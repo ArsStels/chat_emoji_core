@@ -1,0 +1,1 @@
+funcs/ graphics/ locale/ control.lua data.lua info.json settings.lua LICENSE thumbnail.png changelog.txt
