@@ -1,6 +1,6 @@
 ---@diagnostic disable: lowercase-global
 count_em_table = { 1, 2, 5, 10, 100, 1000 }
-size_em_table = { "small", "medium", "large" }
+size_em_table = { {"small"}, {"medium"}, {"large"} }
 
 -- # Создали интерфейс ядра мода с последующими страницами дополнений
 remote.add_interface("chat_emoji_core", {
@@ -122,6 +122,13 @@ function on_gui_click(event)
   --local count = count_em_table[emojis_list_count.selected_index]
   local count = emojis_list_count.items[emojis_list_count.selected_index]
 
+  local checkbocks_autosend = parent["chat_emoji_core.text_label"]["to_chat_checkbox"]
+  log(checkbocks_autosend.name)
+  local checkbocks = checkbocks_autosend.state
+  log(checkbocks)
+
+  local text_field = parent["chat_emoji_core.text_field"]
+
   if not size then
     error(
       "\n\nThe 'emojis_list_size' parameter cannot be nil.\nERROR_CODE: 3\n\nPlease, report it to the author modification @arsstels in discord/github/factorio.com\n")
@@ -133,8 +140,12 @@ function on_gui_click(event)
   end
 
   if size == "small" then
-    text = ("[img=" .. gui.name .. "]"):rep(count)
-    game.print(player.name .. ": " .. text, color)
+    if checkbocks == false then
+      text_field.text = text_field.text .. ("[img=" .. gui.name .. "]"):rep(count)
+    else
+      text = ("[img=" .. gui.name .. "]"):rep(count)
+      game.print(player.name .. ": " .. text, color)
+    end
   else
     if size == "large" then
       local selectedEmoji = nil
@@ -171,10 +182,14 @@ function emojidescription(page_name, player_index, element)
   for ModName, _ in pairs(ModsTable) do
     if page_name == ModName then
       -- # Добавление новых элементов, строки взаимодействия и текстового поля
-      local text_label = element.add { type = "text-box", name = "text_field" }
-      text_label.read_only = true
-      text_label = element.add { type = "checkbox", name = "to_chat_checkbox" , state = true }
-      text_label = element.add { type = "label", name = "label_checkbox", text = "tooltip"}
+      local head_text_label = element.add { type = "flow", name = "chat_emoji_core.text_label" }
+      head_text_label.add { type = "checkbox", name = "to_chat_checkbox" , state = true }
+      head_text_label.add { type = "label", name = "label_checkbox", caption = "chat_emoji_core.label_checkbox" }
+
+      local text_label = element.add { type = "text-box", name = "chat_emoji_core.text_field" }
+      text_label.read_only = false
+      text_label.style.width = 1000
+      text_label.style.height = 40
 
       -- # Добавляем кнопку для выбора размера эмодзи
       local emote_size = element.add { type = "flow", name = "chat_emoji_core.emote_size" }
@@ -189,7 +204,7 @@ function emojidescription(page_name, player_index, element)
       -- # Получаем персональные настройки игрока для оформления таблицы
       -- = Настройки количества столбцов
       local player_table_count = settings.get_player_settings(player_index)
-          ["chat_emoji_gui_emoji_table"].value
+          ["chat_emoji_gui_emoji_table_count"].value
 
       -- = Настройки горизонтальных отступов
       local player_table_horizontal = settings.get_player_settings(player_index)

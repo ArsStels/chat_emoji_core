@@ -10,7 +10,7 @@ data:extend({
     },
     {
         type = "int-setting",
-        name = "chat_emoji_gui_emoji_table",
+        name = "chat_emoji_gui_emoji_table_count",
         setting_type = "runtime-per-user",
         default_value = 6,
         minimum_value = 1,
@@ -43,15 +43,6 @@ data:extend({
         minimum_value = 100,
         maximum_value = 1000,
         order = "d",
-    },
-    {
-        type = "int-setting",
-        name = "chat_emoji_gui_emoji_scroll_pane_height_min",
-        setting_type = "runtime-per-user",
-        default_value = 50,
-        minimum_value = 16,
-        maximum_value = 1000,
-        order = "e",
     },
     {
         type = "int-setting",
